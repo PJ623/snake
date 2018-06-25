@@ -50,16 +50,22 @@ class Game {
         let randomY;
         let randomVector;
 
-        // Keep trying to make apple if apple hasn't been placed.
-        while (this.apple == null) {
-            randomX = Math.floor(Math.random() * this.garden.length);
-            randomY = Math.floor(Math.random() * this.garden.width);
-            randomVector = new Vector(randomX, randomY);
+        // Make sure snake doesn't take up the whole screen, lol.
+        if (this.snake.body.length < (this.garden.length * this.garden.width)) {
+            // Keep trying to make apple if apple hasn't been placed.
+            while (this.apple == null) {
+                randomX = Math.floor(Math.random() * this.garden.length);
+                randomY = Math.floor(Math.random() * this.garden.width);
+                randomVector = new Vector(randomX, randomY);
 
-            if (this.garden.checkSpace(randomVector)) {
-                this.apple = new Apple(randomVector);
-                this.garden.placeEntity(this.apple);
+                if (this.garden.checkSpace(randomVector)) {
+                    this.apple = new Apple(randomVector);
+                    this.garden.placeEntity(this.apple);
+                }
             }
+        } else {
+            // Stop the game if the snake gets too big!
+            this.stop();
         }
     }
 
