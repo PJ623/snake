@@ -50,7 +50,7 @@ class Game {
         let randomY;
         let randomVector;
 
-        // Make the apple if it doesn't exist.
+        // Keep trying to make apple if apple hasn't been placed.
         while (this.apple == null) {
             randomX = Math.floor(Math.random() * this.garden.length);
             randomY = Math.floor(Math.random() * this.garden.width);
@@ -71,7 +71,6 @@ class Game {
         this.detectCollision();
 
         if (!this.hasEnded) {
-
             for (let i = 0; i < this.snake.body.length; i++) {
                 this.garden.placeEntity(this.snake.body[i]);
             }
@@ -129,6 +128,8 @@ class Game {
             let head = this.snake.body[0];
 
             if ((event.key == "w" || event.key == "a" || event.key == "s" || event.key == "d") && (this.hasEnded == false && head.hasMoved == false)) {
+
+                // Lock movement... eg. can't go up if dude just went down. Move to snake.move?
                 if (this.movementMap[event.key].toString() != this.lastMove.toString().replace("1", "-1")
                     && this.movementMap[event.key].toString() != this.lastMove.toString().replace("-1", "1")) {
                     this.snake.move(this.movementMap[event.key]);

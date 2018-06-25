@@ -14,7 +14,7 @@ class Vector {
 }
 
 class Garden {
-    // Length is x, width is y
+    // Length is x, width is y.
     constructor(length, width) {
         this.length = length;
         this.width = width;

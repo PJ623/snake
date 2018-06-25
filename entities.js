@@ -38,9 +38,7 @@ class Snake {
             };
         }
 
-        // Form the snake.
         this.spawnPoint = spawnPoint;
-        //this.body = [new this.head(spawnPoint)];
     }
 
     grow() {
@@ -53,8 +51,6 @@ class Snake {
         }
     }
 
-    // use hasMoved. Tick, then reset
-    // Lock movement... eg. can't go up if dude just went down
     move(vector) {
         let head = this.body[0];
 
@@ -76,8 +72,6 @@ class Snake {
     }
 }
 
-// Make list of apples to be checked against...
-// Spawn apples randomly
 class Apple extends Entity {
     constructor(spawnPoint) {
         super(spawnPoint);
