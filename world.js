@@ -5,7 +5,7 @@ class Vector {
     }
 
     addVector(vector) {
-        return new Vector(this.x+=vector.x, this.y+=vector.y);
+        return new Vector(this.x += vector.x, this.y += vector.y);
     }
 
     toString() {
@@ -19,41 +19,29 @@ class Garden {
         this.length = length;
         this.width = width;
         this.layout = [];
-        this.clearLayout;
-
-        for (let i = 0; i < width; i++) {
-            this.layout.push(new Array(length));
-        }
-
-        this.clearLayout = this.layout;
     }
 
     // Returns true if space is free.
     checkSpace(vector) {
-        console.log("Space being checked:", vector.toString(), this.layout[vector.y][vector.x]);
-        if(this.layout[vector.y][vector.x]){
+        if (this.layout[vector.y][vector.x]) {
             return false;
         } else {
             return true;
         }
-        //return false;
     }
 
-    clear() {
-        console.log("CLEAR");
-        this.layout = this.clearLayout;
+    create() {
+        this.layout = [];
+        for (let i = 0; i < this.width; i++) {
+            this.layout.push(new Array(this.length));
+        }
     }
 
     placeEntity(entity) {
-        if(entity.previousPosition != null){
+        if (entity.previousPosition != null) {
             this.layout[entity.previousPosition.y][entity.previousPosition.x] = null;
         }
         this.layout[entity.position.y][entity.position.x] = entity;
-
-        // for debugging
-        if(entity instanceof Apple){
-            console.log(entity);
-        }
     }
 
     toString() {

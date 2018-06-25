@@ -12,8 +12,9 @@ class Game {
             d: new Vector(1, 0)
         }
         this.lastMove = this.movementMap["d"];
-        this.hasApple = false;
         this.apple;
+        this.score = 0;
+        this.scorePropertyName = "snakeHighScore";
 
         if (fps) {
             this.fps = 1000 / fps;
@@ -39,6 +40,8 @@ class Game {
         if (head.position.toString() == this.apple.position.toString()) {
             this.snake.grow();
             this.apple = null;
+            this.score++;
+            this.showScore();
         }
     }
 
@@ -54,11 +57,8 @@ class Game {
             randomVector = new Vector(randomX, randomY);
 
             if (this.garden.checkSpace(randomVector)) {
-                console.log("Space is clear. Apple placed at", randomVector.toString());
                 this.apple = new Apple(randomVector);
                 this.garden.placeEntity(this.apple);
-            } else {
-                console.log("Space is occupied. Apple failed to be placed at", randomVector.toString());
             }
         }
     }
@@ -74,7 +74,7 @@ class Game {
 
             for (let i = 0; i < this.snake.body.length; i++) {
                 this.garden.placeEntity(this.snake.body[i]);
-            } 
+            }
 
             // Upkeep
             for (let i = 0; i < this.snake.body.length; i++) {
@@ -99,6 +99,14 @@ class Game {
 
     // Starts the game.
     play() {
+        // Set up the game.
+        this.hasEnded = false;
+        this.score = 0;
+        this.apple = null;
+        this.showScore("high");
+        this.garden.create();
+        this.snake.create();
+        this.lastMove = this.movementMap["d"];
 
         // Start with long snake.
         this.snake.grow();
@@ -111,10 +119,12 @@ class Game {
             this.garden.placeEntity(this.snake.body[i]);
         }
 
+        // Place the apple in the garden.
         this.spawnApple();
 
         this.render();
 
+        // Listen for user input.
         document.addEventListener("keypress", (event) => {
             let head = this.snake.body[0];
 
@@ -127,10 +137,15 @@ class Game {
                 }
             }
 
-            // restart if this.hasEnded = true
+            if (this.hasEnded && event.key == "r") {
+                this.score = 0;
+                document.getElementById("message").innerHTML = "";
+                this.showScore();
+                this.play();
+            }
         });
 
-        // What game does every cycle.
+        // Animate the game.
         this.animatedGame = setInterval(() => {
             this.turn();
         }, this.fps);
@@ -138,7 +153,30 @@ class Game {
 
     stop() {
         clearInterval(this.animatedGame);
-        console.log("STOPPED");
-        console.log(this.garden.layout);
+        this.submitScore();
+        this.showScore("high");
+        document.getElementById("message").innerHTML = "You DIED! Press 'r' to play again.";
+    }
+
+    showScore(mode) {
+        if (mode == "high") {
+            document.getElementById("high-score").innerHTML = localStorage.getItem(this.scorePropertyName);
+        } else {
+            document.getElementById("score").innerHTML = this.score;
+        }
+    }
+
+    submitScore() {
+        let previousHighScore = Number(localStorage.getItem(this.scorePropertyName)); // | 0
+
+        if (!previousHighScore) {
+            previousHighScore = 0;
+        }
+
+        if (this.score > previousHighScore) {
+            localStorage.setItem(this.scorePropertyName, this.score);
+        }
+
+        this.score = 0;
     }
 }

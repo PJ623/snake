@@ -14,19 +14,37 @@
             font-family: monospace;
             font-size: 2em;
         }
+
+        #message {
+            font-weight: bold;
+        }
+
+        h1,
+        h2 {
+            font-size: 1.1em;
+        }
     </style>
 </head>
 
 <body>
+    <h1>Snake</h1>
+    <h2>written by
+        <a href="https://pj623.github.io/snake/">PJ623</a>
+    </h2>
+
     <div id="wrapper">
         <div id="canvas">
 
         </div>
     </div>
+    <p id="message">
 
-    <div id="stats">
-
-    </div>
+    </p>
+    <p>Score:
+        <span id="score">0</span>
+        <br> High Score:
+        <span id="high-score">N/A</span>
+    </p>
     <script src="world.js"></script>
     <script src="entities.js"></script>
     <script src="game.js"></script>
