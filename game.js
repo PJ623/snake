@@ -41,7 +41,7 @@ class Game {
             this.snake.grow();
             this.apple = null;
             this.score++;
-            this.showScore();
+            this.submitScore();
         }
     }
 
@@ -103,7 +103,7 @@ class Game {
         this.hasEnded = false;
         this.score = 0;
         this.apple = null;
-        this.showScore("high");
+        this.submitScore();
         this.garden.create();
         this.snake.create();
         this.lastMove = this.movementMap["d"];
@@ -140,7 +140,7 @@ class Game {
             if (this.hasEnded && event.key == "r") {
                 this.score = 0;
                 document.getElementById("message").innerHTML = "";
-                this.showScore();
+                this.submitScore();
                 this.play();
             }
         });
@@ -154,29 +154,22 @@ class Game {
     stop() {
         clearInterval(this.animatedGame);
         this.submitScore();
-        this.showScore("high");
         document.getElementById("message").innerHTML = "You DIED! Press 'r' to play again.";
     }
 
-    showScore(mode) {
-        if (mode == "high") {
-            document.getElementById("high-score").innerHTML = localStorage.getItem(this.scorePropertyName);
-        } else {
-            document.getElementById("score").innerHTML = this.score;
-        }
-    }
-
     submitScore() {
-        let previousHighScore = Number(localStorage.getItem(this.scorePropertyName)); // | 0
+        let previousHighScore = Number(localStorage.getItem(this.scorePropertyName));
 
         if (!previousHighScore) {
-            previousHighScore = 0;
+            localStorage.setItem(this.scorePropertyName, 0);
         }
+
+        document.getElementById("score").innerHTML = this.score;
 
         if (this.score > previousHighScore) {
             localStorage.setItem(this.scorePropertyName, this.score);
         }
 
-        this.score = 0;
+        document.getElementById("high-score").innerHTML = localStorage.getItem(this.scorePropertyName);
     }
 }
