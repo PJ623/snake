@@ -15,7 +15,7 @@
             font-size: 2em;
         }
 
-        #message {
+        .bold {
             font-weight: bold;
         }
 
@@ -28,16 +28,16 @@
 
 <body>
     <h1>Snake</h1>
-    <h2>written by
+    <p class="bold">written by
         <a href="https://github.com/PJ623/snake">PJ623</a>
-    </h2>
+    </p>
 
     <div id="wrapper">
         <div id="canvas">
 
         </div>
     </div>
-    <p id="message">
+    <p id="message" class="bold">
 
     </p>
     <p>Score:
@@ -45,6 +45,20 @@
         <br> High Score:
         <span id="high-score">N/A</span>
     </p>
+    <div>
+        <h2>Instructions:</h2>
+        <ul>
+            <li>Use WASD to move.</li>
+            <li>Collect apples by moving into them.</li>
+            <li>The amount of apples you get is your score.</li>
+            <li>Colliding with the edges of the play area or parts of your snake result in a game over.</li>
+        </ul>
+    </div>
+    <ul>
+        <h2>Legend:</h2>
+        <li># = Snake</li>
+        <li>@ = Apple</li>
+    </ul>
     <script src="world.js"></script>
     <script src="entities.js"></script>
     <script src="game.js"></script>
