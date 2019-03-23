@@ -77,6 +77,7 @@ class Game {
         this.detectCollision();
 
         if (!this.hasEnded) {
+
             for (let i = 0; i < this.snake.body.length; i++) {
                 this.garden.placeEntity(this.snake.body[i]);
             }
@@ -112,6 +113,8 @@ class Game {
         this.garden.create();
         this.snake.create();
         this.lastMove = this.movementMap["d"];
+        this.isPaused = false;
+        var eventListenerIsSetUp = false;
 
         // Start with long snake.
         this.snake.grow();
@@ -130,27 +133,34 @@ class Game {
         this.render();
 
         // Listen for user input.
-        document.addEventListener("keypress", (event) => {
-            let head = this.snake.body[0];
+        if (!eventListenerIsSetUp) {
+            document.addEventListener("keypress", (event) => {
+                let head = this.snake.body[0];
 
-            if ((event.key == "w" || event.key == "a" || event.key == "s" || event.key == "d") && (this.hasEnded == false && head.hasMoved == false)) {
+                if ((event.key == "w" || event.key == "a" || event.key == "s" || event.key == "d") && (this.hasEnded == false && head.hasMoved == false)) {
 
-                // Lock movement... eg. can't go up if dude just went down. Move to snake.move?
-                if (this.movementMap[event.key].toString() != this.lastMove.toString().replace("1", "-1")
-                    && this.movementMap[event.key].toString() != this.lastMove.toString().replace("-1", "1")) {
-                    this.snake.move(this.movementMap[event.key]);
-                    this.userHasInputted = true;
-                    this.lastMove = this.movementMap[event.key];
+                    // Lock movement... eg. can't go up if dude just went down. Move to snake.move?
+                    if (this.movementMap[event.key].toString() != this.lastMove.toString().replace("1", "-1")
+                        && this.movementMap[event.key].toString() != this.lastMove.toString().replace("-1", "1")) {
+                        this.snake.move(this.movementMap[event.key]);
+                        this.userHasInputted = true;
+                        this.lastMove = this.movementMap[event.key];
+                    }
                 }
-            }
 
-            if (this.hasEnded && event.key == "r") {
-                this.score = 0;
-                document.getElementById("message").innerHTML = "";
-                this.submitScore();
-                this.play();
-            }
-        });
+                if (event.key == "r") {
+                    if (this.hasEnded) {
+                        this.score = 0;
+                        document.getElementById("message").innerHTML = "";
+                        this.submitScore();
+                        this.play();
+                    } else if(this.isPaused) {
+                        document.getElementById("message").innerHTML = "";
+                        this.play();
+                    }
+                }
+            });
+        }
 
         // Animate the game.
         this.animatedGame = setInterval(() => {
@@ -162,6 +172,12 @@ class Game {
         clearInterval(this.animatedGame);
         this.submitScore();
         document.getElementById("message").innerHTML = "You DIED! Press 'r' to play again.";
+    }
+
+    pause() {
+        clearInterval(this.animatedGame);
+        this.isPaused = true;
+        document.getElementById("message").innerHTML = "Press 'r' to start the game.";
     }
 
     submitScore() {
